@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "227911375522",
+    "firebase_url": "https://geophotos.firebaseio.com",
+    "project_id": "geophotos",
+    "storage_bucket": "geophotos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:227911375522:android:791f7fd516de9cc4cc55fb",
+        "android_client_info": {
+          "package_name": "fr.dizzz11.tpea_cours_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "227911375522-vetha2djhf0uf5abnff219et4fqbkq4a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBliDMUFOmkPMV7xp8eHZkmtXfo6qwrlbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "227911375522-vetha2djhf0uf5abnff219et4fqbkq4a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
