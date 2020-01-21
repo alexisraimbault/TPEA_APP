@@ -9,7 +9,6 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,8 +28,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,18 +41,20 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btnChoose, btnUpload;
-    private ImageView imageView;
+    private ImageView imageView, btnChoose;
     private TextView queryResult;
 
     private Uri filePath;
 
     private String currentPhotoPath;
+
+    private String objective;
 
     private final int PICK_IMAGE_REQUEST = 71;
 
@@ -70,15 +69,17 @@ public class MainActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_TAKE_PHOTO = 1;
 
+    static final String schoolListId = "hFJRXGSlLIAR5kna8eeyZ";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
+            getSupportActionBar().hide();
 
-            btnChoose = (Button) findViewById(R.id.btnChoose);
-            btnUpload = (Button) findViewById(R.id.btnUpload);
+            btnChoose = (ImageView) findViewById(R.id.btnChoose);
             imageView = (ImageView) findViewById(R.id.imgView);
             queryResult = (TextView) findViewById(R.id.text_view_id);
             storage = FirebaseStorage.getInstance();
@@ -105,19 +106,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadImage();
-            }
-        });
+        setObj();
+
     }
 
     private void chooseImage() {
+
         /*Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }*/
+
         /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         filePath = Uri.fromFile(getOutputMediaFile());
         intent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
@@ -126,23 +125,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        CDAClient client = CDAClient.builder()
-                .setSpace("ir9614n98s3l")
-                .setToken("GqGpKNBtfkOqvBa8hC_bjy6xICvpBmKnKw24kKInEhY")
-                .build();
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-        CDAEntry entry = client.fetch(CDAEntry.class).one("hFJRXGSlLIAR5kna8eeyZ");
-        String[] wordArr = entry.getField("items").toString().split(",");
-        ArrayList<String> wordList = new ArrayList<String>();
-        for(String s : wordArr)
-            wordList.add(s);
-        queryResult.setText(wordList.toString());
+        /**/
 
 
 
-        /*Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 
             File pictureFile = null;
@@ -161,7 +148,9 @@ public class MainActivity extends AppCompatActivity {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
-        }*/
+        }
+
+
     }
 
     private static File getOutputMediaFile(){
@@ -184,13 +173,13 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK )
         {
-            queryResult.setText("ok1");
             File imgFile = new  File(currentPhotoPath);
             if(imgFile.exists())            {
                 imageView.setImageURI(Uri.fromFile(imgFile));
             }
+            uploadImage();
         }else{
-            queryResult.setText("ko1");
+            queryResult.setText("erreur on photo data reception");
         }
     }
 
@@ -280,7 +269,11 @@ public class MainActivity extends AppCompatActivity {
                                     {
                                         labels.add(arr1.getJSONObject(i).getString("description"));
                                     }
-                                    queryResult.setText(labels.toString());
+                                    if(checkPhoto(labels, objective))
+                                        queryResult.setText("BRAVO !");
+                                    else{
+                                        queryResult.setText("ESSAIE ENORE...");
+                                    }
                                 }
                                 catch (Exception e)
                                 {
@@ -332,5 +325,85 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
+    }
+
+    public String getObjective(){
+        ArrayList<String> listObj = getList(schoolListId);
+        Collections.shuffle(listObj);
+        return listObj.get(0);
+    }
+
+    public ArrayList<String> getList(String dbItemId)
+    {
+        CDAClient client = CDAClient.builder()
+                .setSpace("ir9614n98s3l")
+                .setToken("GqGpKNBtfkOqvBa8hC_bjy6xICvpBmKnKw24kKInEhY")
+                .build();
+
+        CDAEntry entry = client.fetch(CDAEntry.class).one(dbItemId);
+        String[] wordArr = entry.getField("items").toString().split(",");
+        ArrayList<String> wordList = new ArrayList<String>();
+        for(String s : wordArr)
+            wordList.add(s);
+        return wordList;
+    }
+
+    public ArrayList<String> getLexicList(String word, int nb)
+    {
+        try{
+            URL serverUrl = new URL("https://api.datamuse.com/words?ml=" + word + "&max=" + nb);
+            URLConnection urlConnection = serverUrl.openConnection();
+            HttpURLConnection httpConnection = (HttpURLConnection)urlConnection;
+            httpConnection.setRequestMethod("GET");
+            httpConnection.setRequestProperty("Content-Type", "application/json");
+
+            String response = httpConnection.getResponseMessage();
+
+            if (httpConnection.getInputStream() == null) {
+                System.out.println("No stream");
+                return null;//TODO
+            }
+
+            Scanner httpResponseScanner = new Scanner (httpConnection.getInputStream());
+            String resp = "";
+            while (httpResponseScanner.hasNext()) {
+                String line = httpResponseScanner.nextLine();
+                resp += line;
+                Log.d("test", line);
+                //System.out.println(line);  //  alternatively, print the line of response
+            }
+            httpResponseScanner.close();
+            queryResult.setText(resp);
+            JSONArray arr = new JSONArray(resp);
+            ArrayList<String> labels = new ArrayList<String>();
+            for(int i = 0; i < arr.length(); i++)
+            {
+                labels.add(arr.getJSONObject(i).getString("word"));
+            }
+            return labels;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean checkPhoto(ArrayList<String> googleResp, String word){
+        ArrayList<String> lexic = getLexicList(word, 30);
+        for(String label : googleResp)
+        {
+            if(objective.equals(label.toLowerCase()))
+                return true;
+            for(String lex : lexic)
+                if(label.toLowerCase().equals(lex.toLowerCase()))
+                    return true;
+        }
+        return false;
+    }
+
+    public void setObj(){
+        this.objective = getObjective();
+        queryResult.setText(objective);
     }
 }
