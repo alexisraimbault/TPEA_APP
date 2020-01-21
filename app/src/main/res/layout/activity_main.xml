@@ -37,6 +37,16 @@
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="252dp"></ImageView>
 
+                <com.wang.avi.AVLoadingIndicatorView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="264dp"
+                    android:id="@+id/loading"
+                    app:indicatorName="BallPulseIndicator"
+                    app:layout_constraintEnd_toEndOf="@+id/bg"
+                    app:layout_constraintStart_toStartOf="@+id/bg"
+                    app:layout_constraintTop_toTopOf="@+id/bg" />
+
                 <TextView
                     android:id="@+id/text_view_id"
                     android:layout_width="wrap_content"

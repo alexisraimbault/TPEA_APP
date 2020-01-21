@@ -28,6 +28,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,6 +50,8 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
     private ImageView imageView, btnChoose;
     private TextView queryResult;
+
+    private AVLoadingIndicatorView loading;
 
     private Uri filePath;
 
@@ -85,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
             storage = FirebaseStorage.getInstance();
             storageReference = storage.getReference();
 
+            loading = (AVLoadingIndicatorView) findViewById(R.id.loading);
+
 
 
         }
@@ -105,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
                 chooseImage();
             }
         });
+
+        loading.hide();
 
         setObj();
 
@@ -187,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(currentPhotoPath != null)
         {
+            //loading.smoothToShow();
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
@@ -196,8 +204,8 @@ public class MainActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
-                            Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                            progressDialog.setTitle("Analysing...");
+                            //Toast.makeText(MainActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -265,18 +273,22 @@ public class MainActivity extends AppCompatActivity {
                                     JSONArray arr = json.getJSONArray("responses");
                                     JSONArray arr1 = ((JSONObject)arr.get(0)).getJSONArray("labelAnnotations");
                                     ArrayList<String> labels = new ArrayList<String>();
-                                    for(int i = 0; i < arr1.length(); i++)
-                                    {
+                                    for(int i = 0; i < arr1.length(); i++) {
                                         labels.add(arr1.getJSONObject(i).getString("description"));
                                     }
-                                    if(checkPhoto(labels, objective))
+                                    if(checkPhoto(labels, objective)){
+                                        progressDialog.dismiss();
                                         queryResult.setText("BRAVO !");
+
+                                    }
                                     else{
+                                        progressDialog.dismiss();
                                         queryResult.setText("ESSAIE ENORE...");
                                     }
                                 }
                                 catch (Exception e)
                                 {
+                                    progressDialog.dismiss();
                                     e.printStackTrace();
                                 }
 
