@@ -8,7 +8,6 @@
     tools:context=".MainActivity">
 
 
-
     <LinearLayout
         android:id="@+id/layout_top"
         android:orientation="vertical"
@@ -34,18 +33,21 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerInside"
                     android:src="@drawable/background"
-                    tools:layout_editor_absoluteX="0dp"
-                    tools:layout_editor_absoluteY="252dp"></ImageView>
+                    tools:layout_editor_absoluteX="-16dp"
+                    tools:layout_editor_absoluteY="-16dp"></ImageView>
 
-                <com.wang.avi.AVLoadingIndicatorView
+                <TextView
+                    android:id="@+id/text_view_objective"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="264dp"
-                    android:id="@+id/loading"
-                    app:indicatorName="BallPulseIndicator"
+                    android:text=""
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/bg"
+                    app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="@+id/bg"
-                    app:layout_constraintTop_toTopOf="@+id/bg" />
+                    app:layout_constraintTop_toTopOf="@+id/bg"
+                    app:layout_constraintVertical_bias="0.108" />
 
                 <TextView
                     android:id="@+id/text_view_id"
@@ -83,6 +85,20 @@
                     app:layout_constraintStart_toStartOf="@+id/bg"
                     app:layout_constraintTop_toTopOf="@+id/bg"
                     app:layout_constraintVertical_bias="0.92" />
+
+                <ImageView
+                    android:id="@+id/btnNext"
+                    android:layout_width="93dp"
+                    android:layout_height="72dp"
+                    android:src="@drawable/next"
+                    android:text="Choose"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/bg"
+                    app:layout_constraintHorizontal_bias="0.949"
+                    app:layout_constraintStart_toStartOf="@+id/bg"
+                    app:layout_constraintTop_toTopOf="@+id/bg"
+                    app:layout_constraintVertical_bias="0.955"
+                    android:visibility="gone"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
