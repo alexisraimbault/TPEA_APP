@@ -36,70 +36,49 @@
                     tools:layout_editor_absoluteX="-16dp"
                     tools:layout_editor_absoluteY="-16dp"></ImageView>
 
+
                 <TextView
-                    android:id="@+id/text_view_objective"
+                    android:id="@+id/description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textSize="30sp"
+                    android:textSize="25sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/bg"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="@+id/bg"
                     app:layout_constraintTop_toTopOf="@+id/bg"
-                    app:layout_constraintVertical_bias="0.108"
-                    android:clickable="true"/>
+                    app:layout_constraintVertical_bias="0.175"
+                    android:padding="10dp"
+                    android:textAlignment="center"/>
 
                 <ImageView
-                    android:id="@+id/btnQuestion"
-                    android:layout_width="75dp"
-                    android:layout_height="57dp"
-                    android:src="@drawable/question"
+                    android:id="@+id/roundBg"
+                    android:layout_width="242dp"
+                    android:layout_height="161dp"
+                    android:src="@drawable/itembg"
+                    android:text="Choose"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/bg"
+                    app:layout_constraintHorizontal_bias="0.497"
                     app:layout_constraintStart_toStartOf="@+id/bg"
                     app:layout_constraintTop_toTopOf="@+id/bg"
-                    app:layout_constraintVertical_bias="0.207" />
-
-                <TextView
-                    android:id="@+id/text_view_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="30sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/bg"
-                    app:layout_constraintHorizontal_bias="0.525"
-                    app:layout_constraintStart_toStartOf="@+id/bg"
-                    app:layout_constraintTop_toTopOf="@+id/bg"
-                    app:layout_constraintVertical_bias="0.359" />
+                    app:layout_constraintVertical_bias="0.956" />
 
                 <ImageView
-                    android:id="@+id/imgView"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/bg"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="@+id/bg"
-                    app:layout_constraintTop_toTopOf="@+id/bg"
-                    app:layout_constraintVertical_bias="0.597" />
-
-                <ImageView
-                    android:id="@+id/btnChoose"
+                    android:id="@+id/image"
                     android:layout_width="150dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/camera"
                     android:text="Choose"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/bg"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="@+id/bg"
                     app:layout_constraintTop_toTopOf="@+id/bg"
-                    app:layout_constraintVertical_bias="0.92" />
+                    app:layout_constraintVertical_bias="0.911" />
 
                 <ImageView
-                    android:id="@+id/btnNext"
+                    android:id="@+id/btnBack"
                     android:layout_width="93dp"
                     android:layout_height="72dp"
                     android:src="@drawable/next"
@@ -109,8 +88,7 @@
                     app:layout_constraintHorizontal_bias="0.949"
                     app:layout_constraintStart_toStartOf="@+id/bg"
                     app:layout_constraintTop_toTopOf="@+id/bg"
-                    app:layout_constraintVertical_bias="0.955"
-                    android:visibility="gone"/>
+                    app:layout_constraintVertical_bias="0.955"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

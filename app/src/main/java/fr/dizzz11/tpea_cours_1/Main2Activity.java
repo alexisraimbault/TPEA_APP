@@ -47,7 +47,7 @@ import java.util.Scanner;
 import java.util.UUID;
 
 public class Main2Activity extends AppCompatActivity {
-    private ImageView imageView, btnChoose, btnNext;
+    private ImageView imageView, btnChoose, btnNext, btnQuestion;
     private TextView queryResult, objective_text;
 
 
@@ -56,6 +56,7 @@ public class Main2Activity extends AppCompatActivity {
     private String currentPhotoPath;
 
     private String objective;
+    private boolean firstObj;
 
     private final int PICK_IMAGE_REQUEST = 71;
 
@@ -70,6 +71,8 @@ public class Main2Activity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_TAKE_PHOTO = 1;
 
+    private static final String OBJ_VALUE = "objValue";
+
     private String schoolListId ;
 
     @Override
@@ -83,6 +86,7 @@ public class Main2Activity extends AppCompatActivity {
             btnChoose = (ImageView) findViewById(R.id.btnChoose);
             btnNext = (ImageView) findViewById(R.id.btnNext);
             imageView = (ImageView) findViewById(R.id.imgView);
+            btnQuestion = (ImageView) findViewById(R.id.btnQuestion);
             queryResult = (TextView) findViewById(R.id.text_view_id);
             objective_text = (TextView) findViewById(R.id.text_view_objective);
             storage = FirebaseStorage.getInstance();
@@ -118,9 +122,27 @@ public class Main2Activity extends AppCompatActivity {
             }
         });
 
-        setObj();
+        btnQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startQuestionActivity();
+            }
+        });
+
+        if (savedInstanceState != null) {
+            setObj(savedInstanceState.getString(OBJ_VALUE));
+        }else{
+            setObj();
+        }
 
     }
+
+    @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putCharSequence(OBJ_VALUE, this.objective);
+    }
+
 
     private void chooseImage() {
 
@@ -288,7 +310,7 @@ public class Main2Activity extends AppCompatActivity {
                             }
                             else{
                                 progressDialog.dismiss();
-                                queryResult.setText("ESSAIE ENORE...");
+                                queryResult.setText("ESSAIE ENCORE...");
                             }
                         }
                         catch (Exception e)
@@ -425,5 +447,19 @@ public class Main2Activity extends AppCompatActivity {
         btnNext.setVisibility(View.GONE);
         queryResult.setText("");
         imageView.setImageDrawable(null);
+    }
+
+    public void setObj(String obj){
+        this.objective = obj;
+        objective_text.setText(objective);
+        btnNext.setVisibility(View.GONE);
+        queryResult.setText("");
+        imageView.setImageDrawable(null);
+    }
+
+    public void startQuestionActivity() {
+        Intent intent = new Intent(this, Main3Activity.class);
+        intent.putExtra(MainActivity.EXTRA_MESSAGE, objective);
+        startActivity(intent);
     }
 }

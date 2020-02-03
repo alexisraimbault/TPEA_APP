@@ -12,13 +12,14 @@
 
     <application
         android:allowBackup="true"
-        android:configChanges="orientation|screenSize"
+        android:configChanges="orientation"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Main2Activity"></activity>
+        <activity android:name=".Main3Activity"></activity>
+        <activity android:name=".Main2Activity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
